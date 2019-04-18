@@ -1,4 +1,4 @@
-package net.lzzy.practicesonline.activities.models;
+package net.lzzy.practicesonline.activities.models.view;
 
 import net.lzzy.sqllib.AsPrimaryKey;
 
