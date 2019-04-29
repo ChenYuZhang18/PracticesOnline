@@ -1,4 +1,4 @@
-package net.lzzy.practicesonline.activities.models;
+package net.lzzy.practicesonline.activities.models.view;
 
 /**
  * Created by lzzy_gxy on 2019/4/16.
@@ -22,7 +22,7 @@ public enum QuestionType {
     public static QuestionType getInstance(int ordinal){
         for (QuestionType type:QuestionType.values()){
             if (type.ordinal()==ordinal){
-
+                    return type;
             }
         }
         return null;

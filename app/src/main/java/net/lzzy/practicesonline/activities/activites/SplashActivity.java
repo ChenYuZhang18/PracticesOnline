@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import net.lzzy.practicesonline.R;
-import net.lzzy.practicesonline.activities.constants.ApicContstants;
+import net.lzzy.practicesonline.activities.constants.ApiConstants;
 import net.lzzy.practicesonline.activities.fragments.SplashFragment;
 import net.lzzy.practicesonline.activities.utlis.AbstractStaticHandler;
 import net.lzzy.practicesonline.activities.utlis.AppUtils;
@@ -122,7 +122,7 @@ public class SplashActivity extends BaseActivity implements SplashFragment.OnSpL
 
     private void detectServerStatus(){
         try {
-            AppUtils.tryConnectServer(ApicContstants.URL_API);
+            AppUtils.tryConnectServer(ApiConstants.URL_API);
         } catch (IOException e) {
             isServerOn=false;
             handler.sendMessage(handler.obtainMessage(WHAT_SERVER_OFF,e.getMessage()));

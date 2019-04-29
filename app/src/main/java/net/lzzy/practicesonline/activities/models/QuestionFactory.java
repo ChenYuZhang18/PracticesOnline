@@ -1,4 +1,4 @@
-package net.lzzy.practicesonline.activities.models.view;
+package net.lzzy.practicesonline.activities.models;
 
 import android.text.TextUtils;
 import net.lzzy.practicesonline.activities.constants.DbConstants;

@@ -1,4 +1,4 @@
-package net.lzzy.practicesonline.activities.models.view;
+package net.lzzy.practicesonline.activities.models;
 
 import net.lzzy.practicesonline.activities.constants.DbConstants;
 import net.lzzy.practicesonline.activities.utlis.AppUtils;
@@ -64,7 +64,7 @@ public class PracticeFactory {
     }
 
     /**  **/
-    public UUID getPractice(int apiId){
+    public UUID getPracticeId(int apiId){
         try {
             List<Practice> practices=repository.getByKeyword(String.valueOf(apiId),
                     new String[]{Practice.COL_API_ID},true);

@@ -1,20 +1,25 @@
-package net.lzzy.practicesonline.activities.models.view;
+package net.lzzy.practicesonline.activities.models;
 
+import net.lzzy.practicesonline.activities.constants.ApiConstants;
 import net.lzzy.sqllib.Ignored;
+import net.lzzy.sqllib.Jsonable;
 import net.lzzy.sqllib.Sqlitable;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.Date;
 
 /**
  * Created by lzzy_gxy on 2019/4/16.
  * Description:
  */
-public class Practice extends BaseEntity implements Sqlitable {
+public class Practice extends BaseEntity implements Sqlitable, Jsonable {
     @Ignored
     public static final String COL_NAME="name";
-    public static final String COL_OUTLINES="outlines";
-    public static final String COL_API_ID = "apiId";
     @Ignored
+    public static final String COL_OUTLINES="outlines";
+    @Ignored
+    public static final String COL_API_ID = "apiId";
+
     private String name;
     private int questionCount;
     private Date downloadDate;
@@ -73,5 +78,19 @@ public class Practice extends BaseEntity implements Sqlitable {
     @Override
     public boolean needUpdate() {
         return false;
+    }
+
+    @Override
+    public JSONObject toJson() throws JSONException {
+        return null;
+    }
+
+    @Override
+    public void fromJson(JSONObject jsonObject) throws JSONException {
+        apiId=jsonObject.getInt(ApiConstants.JSON_PRACTICE_API_ID);
+        name=jsonObject.getString(ApiConstants.JSON_PRACTICE_NAME);
+        outlines=jsonObject.getString(ApiConstants.JSON_PRACTICE_OUTLINES);
+        questionCount=jsonObject.getInt(ApiConstants.JSON_PRACTICE_QUESTION_COUNT);
+        downloadDate=new Date();
     }
 }
