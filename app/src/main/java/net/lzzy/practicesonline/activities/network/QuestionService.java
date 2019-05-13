@@ -18,10 +18,6 @@ import java.util.UUID;
  * Description:
  */
 public class QuestionService {
-    public static String getQuestionsOfPracticeFromServer(int apiId)throws IOException{
-        String address= ApiConstants.URL_QUESTIONS + apiId;
-        return ApiService.okGet(address);
-    }
     public static List<Question> getQuestions(String json, UUID practiceId) throws IllegalAccessException, JSONException, InstantiationException {
         JsonConverter<Question> converter=new JsonConverter<>(Question.class);
         List<Question> questions=converter.getArray(json);
@@ -31,25 +27,31 @@ public class QuestionService {
         return questions;
     }
 
-
-    public static List<Option> getOptionFromJson(String jsonOptions, String jsonAnswers) throws IllegalAccessException, JSONException, InstantiationException {
-        JsonConverter<Option> converter = new JsonConverter<>(Option.class);
-        List<Option> options = converter.getArray(jsonOptions);
-        List<Integer> answerIds = new ArrayList<>();
-        JSONArray array = (JSONArray) (new JSONTokener(jsonAnswers)).nextValue();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject obj = array.getJSONObject(i);
-            answerIds.add(obj.getInt(ApiConstants.JSON_ANSWERS_OPTION_ID));
+    public static List<Option> getOptionsFromJson(String jsonOptions,String jsonAnswers)throws IllegalAccessException, JSONException, InstantiationException {
+        JsonConverter<Option>converter=new JsonConverter<>(Option.class);
+        List<Option>options=converter.getArray(jsonOptions);
+        List<Integer>answerIds=new ArrayList<>();
+        JSONArray array=(JSONArray)(new JSONTokener(jsonAnswers)).nextValue();
+        for (int i=0;i<array.length();i++){
+            JSONObject object=array.getJSONObject(i);
+            answerIds.add(object.getInt(ApiConstants.JSON_ANSWERS_OPTION_ID));
         }
-        for (Option o : options) {
+        for (Option o:options){
             if (answerIds.contains(o.getApiId())) {
                 o.setAnswer(true);
-            } else {
+            }else {
                 o.setAnswer(false);
             }
         }
         return options;
     }
 
+    public static String getQuestionsOfPracticeFromServer(int apiId) throws IOException {
+        String address= ApiConstants.URL_QUESTIONS + apiId;
+        return ApiService.okGet(address);
+
+    }
 }
+
+
 

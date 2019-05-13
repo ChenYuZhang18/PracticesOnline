@@ -27,6 +27,13 @@ public class ApiConstants {
     public static final String URL_QUESTIONS=URL_API.concat(ACTION_QUESTIONS);
 
     /**
+     * 提交结果
+     */
+    private static final String ACTION_RESULT="/api/result/PracticeResult";
+    public static final String URL_RESULT=URL_API.concat(ACTION_RESULT);
+
+
+    /**EIONS
      * 地址
      */
 
@@ -53,6 +60,17 @@ public class ApiConstants {
     public static final String JSON_OPTION_LABEL="Label";
     public static final String JSON_OPTION_API_ID="Id";
     public static final String JSON_ANSWERS_OPTION_ID="OptionId";
+
+    /**
+     * 地址
+     */
+
+    public static final String JSON_RESULT_API_ID="PracticeId";
+    public static final String JSON_RESULT_SCORE_RATIO="ScroreRatio";
+    public static final String JSON_RESULT_WRONG_IDS="WrongQuestionIds";
+    public static final String JSON_RESULT_INFO="PhoneNo";
+
+
 
 
 }

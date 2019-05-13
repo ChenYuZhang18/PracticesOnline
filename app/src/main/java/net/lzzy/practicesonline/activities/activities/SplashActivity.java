@@ -1,4 +1,4 @@
-package net.lzzy.practicesonline.activities.activites;
+package net.lzzy.practicesonline.activities.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;

@@ -13,13 +13,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.SearchView;
 import net.lzzy.practicesonline.R;
-import net.lzzy.practicesonline.activities.activites.SplashActivity;
+import net.lzzy.practicesonline.activities.activities.SplashActivity;
 
 /**
  * Created by lzzy_gxy on 2019/4/15.
  * Description:
  */
 public class ViewUtils {
+
+    /** 把dp转换成px **/
+    public static int dp2px(int dpValue,Context context) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+
     private static AlertDialog dialog;
     public static void showProgress(Context context,String message){
         if (dialog==null){

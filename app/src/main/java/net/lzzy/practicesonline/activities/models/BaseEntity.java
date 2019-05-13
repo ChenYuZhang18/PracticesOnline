@@ -1,7 +1,6 @@
 package net.lzzy.practicesonline.activities.models;
 
 import net.lzzy.sqllib.AsPrimaryKey;
-
 import java.util.UUID;
 
 /**

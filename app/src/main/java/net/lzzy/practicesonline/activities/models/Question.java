@@ -6,10 +6,8 @@ import net.lzzy.practicesonline.activities.network.QuestionService;
 import net.lzzy.sqllib.Ignored;
 import net.lzzy.sqllib.Jsonable;
 import net.lzzy.sqllib.Sqlitable;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -101,7 +99,7 @@ public class Question extends BaseEntity implements Sqlitable, Jsonable {
         String setOptions = jsonObject.getString(ApiConstants.JSON_QUESTION_OPTIONS);
         String serAnswers = jsonObject.getString(ApiConstants.JSON_QUESTION_ANSWER);
         try {
-            List<Option> options = QuestionService.getOptionFromJson(setOptions, serAnswers);
+            List<Option> options = QuestionService.getOptionsFromJson(setOptions, serAnswers);
             for (Option option : options) {
                 option.setQuestionId(id);
             }

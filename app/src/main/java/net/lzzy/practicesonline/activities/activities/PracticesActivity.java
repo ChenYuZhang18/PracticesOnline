@@ -1,4 +1,5 @@
-package net.lzzy.practicesonline.activities.activites;
+package net.lzzy.practicesonline.activities.activities;
+
 
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -16,48 +17,56 @@ import net.lzzy.practicesonline.activities.network.DetectWebService;
 import net.lzzy.practicesonline.activities.utlis.AppUtils;
 import net.lzzy.practicesonline.activities.utlis.ViewUtils;
 
-
 /**
  * Created by lzzy_gxy on 2019/4/16.
  * Description:
  */
-public class PracticesActivity extends BaseActivity implements PracticesFragment.OnPracticesSelectedListener {
-    public static final String EXTRA_PRACTICE_ID = "extraPracticeId";
-    public static final String EXTRA_API_ID = "extraApiId";
-    public static final String EXTRA_LOCAL_COUNT = "localhost";
-
+public class PracticesActivity extends BaseActivity implements PracticesFragment.OnPracticesSelectedListener{
+    public static final String EXTRA_LOCAL_COUNT ="localhost" ;
+    public static final String EXTRA_PRACTICE_ID ="practiceId" ;
+    public static final String EXTRA_API_ID ="apiId" ;
     private ServiceConnection connection;
-
     private boolean refresh=false;
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SearchView search = findViewById(R.id.main_sv_search);
-        search.setQueryHint("请输入关键词搜索");
+        if (getIntent()!=null){
+            refresh=getIntent().getBooleanExtra(DetectWebService.EXTRA_REFRESH,false);
+        }
+
+        connection=new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                DetectWebService.DetectWebBinder binder=(DetectWebService.DetectWebBinder) service;
+                binder.detect();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
+        SearchView search= findViewById(R.id.main_sv_search);
+        search.setQueryHint("输入搜索的关键词");
         search.setOnQueryTextListener(new ViewUtils.AbstractQueryListener() {
             @Override
             public void handleQuery(String kw) {
-                ((PracticesFragment) getFragment()).search(kw);
+                ((PracticesFragment)getFragment()).search(kw);
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
         });
 
-        if (getIntent()!=null){
-            refresh=getIntent().getBooleanExtra(DetectWebService.EXTRA_REFRESH,false);
-        }
-
         /**④Activity中创建ServiceConnection**/
-        connection = new ServiceConnection() {
+        connection=new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                DetectWebService.DetectWebBinder binder = (DetectWebService.DetectWebBinder) service;
+                DetectWebService.DetectWebBinder binder= (DetectWebService.DetectWebBinder) service;
                 binder.detect();
             }
 
@@ -69,13 +78,11 @@ public class PracticesActivity extends BaseActivity implements PracticesFragment
 
         //读取本地数据，传到DetectWebService,进行对比
         int localCount = PracticeFactory.getInstance().get().size();
-        Intent intent = new Intent(this, DetectWebService.class);
-        intent.putExtra(EXTRA_LOCAL_COUNT, localCount);
+        Intent intent=new Intent(this,DetectWebService.class);
+        intent.putExtra(EXTRA_LOCAL_COUNT,localCount);
 
         /**⑤Activity中启动Service(bindService/startService)**/
-        bindService(intent, connection, BIND_AUTO_CREATE);
-
-
+        bindService(intent,connection,BIND_AUTO_CREATE);
     }
 
     @Override
@@ -84,14 +91,6 @@ public class PracticesActivity extends BaseActivity implements PracticesFragment
         if (refresh){
             ((PracticesFragment)getFragment()).staetRefresh();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setMessage("退出应用吗？")
-                .setPositiveButton("退出",((dialog, which) -> AppUtils.exit()))
-                .show();
     }
 
     @Override
@@ -115,7 +114,6 @@ public class PracticesActivity extends BaseActivity implements PracticesFragment
         return new PracticesFragment();
     }
 
-
     @Override
     public void onPracticesSelected(String practiceId, int apiId) {
         Intent intent = new Intent(this, QuestionActivity.class);
@@ -124,5 +122,11 @@ public class PracticesActivity extends BaseActivity implements PracticesFragment
         startActivity(intent);
     }
 
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("要退出吗？")
+                .setPositiveButton("确定", (dialog, which) -> AppUtils.exit())
+                .show();
+    }
 
 }
