@@ -10,12 +10,16 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
 import net.lzzy.practicesonline.R;
 import net.lzzy.practicesonline.activities.fragments.QuestionFragment;
+import net.lzzy.practicesonline.activities.models.FavoriteFactory;
 import net.lzzy.practicesonline.activities.models.Question;
 import net.lzzy.practicesonline.activities.models.QuestionFactory;
 import net.lzzy.practicesonline.activities.models.UserCookies;
@@ -25,7 +29,9 @@ import net.lzzy.practicesonline.activities.network.PracticeService;
 import net.lzzy.practicesonline.activities.utlis.AbstractStaticHandler;
 import net.lzzy.practicesonline.activities.utlis.AppUtils;
 import net.lzzy.practicesonline.activities.utlis.ViewUtils;
+
 import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +42,7 @@ public class QuestionActivity extends AppCompatActivity {
     public static final int WHAT_EXCEPTION = 2;
     public static final String EXTRA_PRACTICE_ID = "extraPracticeId";
     public static final String EXTRA_RESULT = "extraResult";
-    public static final int REQUEST_CODE_RESULT = 0;
+    public static final int REQUEST_CODE_RESULT = 2;
     private int apiId;
     private List<Question> questions;
     private TextView tvView;
@@ -103,9 +109,36 @@ public class QuestionActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_RESULT);
     }
 
-        @Override
-    public void onActivityReenter(int resultCode, Intent data) {
-        super.onActivityReenter(resultCode, data);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==ResultActivity.RESULT_CODE&&requestCode==REQUEST_CODE_RESULT) {
+            pager.setCurrentItem(data.getIntExtra(ResultActivity.POSITION,-1));
+
+        }
+        if (requestCode==ResultActivity.RESULT_CODE_PRACTICE && resultCode==REQUEST_CODE_RESULT&&data!=null){
+            String practiceId=data.getStringExtra(ResultActivity.PRACTICES_ID);
+            if (!practiceId.isEmpty()){
+                List<Question> questionList=new ArrayList<>();
+                FavoriteFactory factory=FavoriteFactory.getInstance();
+                for (Question question:QuestionFactory.getInstance().getByPractice(practiceId)){
+                    if (factory.isQuestionStarred(question.getId().toString())){
+                        questionList.add(question);
+                    }
+                }
+                questions.clear();
+                questions.addAll(questionList);
+                initDots();
+                adapter.notifyDataSetChanged();
+                if (questions.size()>0){
+                    pager.setCurrentItem(0);
+                    refreshDots(0);
+                }
+
+            }
+
+        }
+
     }
 
     /** 提交 **/
@@ -160,7 +193,9 @@ public class QuestionActivity extends AppCompatActivity {
             switch (msg.what){
                 case WHAT_OK:
                     questionActivity.isCommitted=true;
+                    UserCookies.getInstance().commitPractice(questionActivity.practiceId);
                     Toast.makeText(questionActivity, "提交成功", Toast.LENGTH_SHORT).show();
+                    questionActivity.redirect();
                     break;
                 case WHAT_NO:
                     Toast.makeText(questionActivity, "提交失败", Toast.LENGTH_SHORT).show();
@@ -175,7 +210,6 @@ public class QuestionActivity extends AppCompatActivity {
         }
 
     }
-
 
     /** pager导航点的操作及显示 **/
     private void initDots() {
@@ -264,4 +298,5 @@ public class QuestionActivity extends AppCompatActivity {
         super.onStop();
         AppUtils.setStopped(getLocalClassName());
     }
+
 }

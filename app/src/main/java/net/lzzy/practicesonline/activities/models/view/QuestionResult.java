@@ -12,6 +12,7 @@ public class QuestionResult implements Parcelable {
     private UUID questionId;
     private boolean isRight;
     private WrongType type;
+    public QuestionResult(){}
 
     protected QuestionResult(Parcel in) {
         isRight = in.readByte() != 0;

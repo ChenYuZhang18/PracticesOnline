@@ -23,9 +23,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="asfasdfasedfasdfsadf"
+                android:text="陈.Y.Z"
+
                 android:visibility="gone"
-                android:textColor="@android:color/holo_green_dark"/>
+                android:textColor="@android:color/holo_red_light"/>
 
             <LinearLayout android:id="@+id/activity_question_dots"
                 android:layout_width="match_parent"
@@ -49,6 +50,7 @@
                 android:textSize="22sp"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:text="看" />
             <TextView android:id="@+id/activity_question_tv_commit"
                 android:layout_width="60dp"
@@ -60,6 +62,7 @@
                 android:textSize="22sp"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:paddingBottom="15dp" />
 
         </FrameLayout>
